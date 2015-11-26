@@ -1,8 +1,6 @@
 package com.example.uploader;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -65,39 +63,15 @@ public class SearchActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new PhotoItemClickListener());
 
         // TODO 1-3 ユーザー一覧を取得し、Spinnerに変更を反映しましょう
-        ParseQuery.getQuery("_User").findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (objects == null) return;
-                mUserList.addAll(objects);
-                mUserAdapter.notifyDataSetChanged();
-            }
-        });
+
     }
 
     // ユーザーを選択した時の動作を定義するクラス
     private class SpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
             // TODO 2-1 選択されたユーザーの写真一覧を取得し、GridViewを更新します。
 
-            ParseObject object = (ParseObject) parent.getItemAtPosition(position);
-            String userId = object.getObjectId();
-
-            ParseQuery.getQuery("photo")
-            .whereEqualTo("uploadUserId", userId)
-            .findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> objects, ParseException e) {
-                    if (objects == null) {
-                        return;
-                    }
-                    mPhotoList.clear();
-                    mPhotoList.addAll(objects);
-                    mPhotoAdapter.notifyDataSetChanged();
-                }
-            });
         }
 
         @Override
@@ -110,26 +84,8 @@ public class SearchActivity extends AppCompatActivity {
     private class PhotoItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final ParseObject photo = (ParseObject) parent.getItemAtPosition(position);
-
             // TODO 3-1 タップした写真に対してアクションを選択するAlertDialogを表示します
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(SearchActivity.this);
-            builder.setItems(new String[]{"Like", "Show users who liked", "delete"}, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0) {
-                        putLike(photo);
-                    }
-                    if (which == 1) {
-                        showLikedUsers(photo);
-                    }
-                    if (which == 2) {
-                        deletePhoto(photo);
-                    }
-                }
-            });
-            builder.show();
         }
     }
 
@@ -224,15 +180,14 @@ public class SearchActivity extends AppCompatActivity {
             TextView text = (TextView) view.findViewById(android.R.id.text1);
 
             // TODO 1-1 text に ユーザー名(username)をsetTextしましょう
-            ParseObject object = getItem(position);
-            text.setText(object.getString("username"));
+
             return view;
         }
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             // TODO 1-2 getViewと同じ処理を行いましょう
-            return getView(position, convertView, parent);
+            return null;
         }
     }
 
